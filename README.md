@@ -1,7 +1,6 @@
 ## Interaction and Visualization Specialization
 ### Three-Dimensional Vizualization and Animation Course Project
 ### Instituto Superior Técnico 2017/2018
-======
 
 #### MicroMachines Game WebGL
 |Movement|Key|
