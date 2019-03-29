@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8">
+        <title></title>
+        <style>
+            body {
+                margin: 0px;
+                overflow: hidden;
+              }
+
+            #info-wrapper {
+                position: absolute;
+                top: 10px;
+                width: 255px;
+                text-align: right;
+                z-index: 100;
+                display: block;
+                color: white;
+                font-family: arial;
+                font-weight: bold;
+                margin-right: 70px;
+                right: 0px;
+                font-size: 20px;
+                height: 30px;
+            }
+            #info{
+                margin-top: 10px;
+                float: right;
+            }
+            #live {
+                width: 255px;
+                float: right;
+            }
+            #car-life{
+                width: 80px;
+                height: 40px;
+                float: left;
+                margin-left: 5px;
+                background-image: url(./textures/carPic.jpg);
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .life-wrapper{
+                width: stretch;
+            }
+
+        </style>
+        
+        
+         <!-- GLSL vertex shader for oranges -->
+
+        <script id="norm-vert-shader" type="x-shader/x-vertex">
+            attribute vec4 tangent;
+            
+            uniform vec2 uvScale;
+            uniform vec3 lightPosition;
+
+            varying vec2 vUv;
+            varying mat3 tbn;
+            varying vec3 vLightVector;
+
+            void main() {
+                    vUv = uvScale * uv;
+
+                /** Create tangent-binormal-normal matrix used to transform
+                    coordinates from object space to tangent space */
+                    vec3 vNormal = normalize(normalMatrix * normal);
+                    vec3 vTangent = normalize( normalMatrix * tangent.xyz );
+                    vec3 vBinormal = normalize(cross( vNormal, vTangent ) * tangent.w);
+                    tbn = mat3(vTangent, vBinormal, vNormal);
+
+                /** Calculate the vertex-to-light vector */
+                    vec4 lightVector = viewMatrix * vec4(lightPosition, 1.0);
+                    vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+                    vLightVector = normalize(lightVector.xyz - modelViewPosition.xyz);
+
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        </script>
+
+          <!-- GLSL fragment shader for oranges -->
+          <script id="norm-frag-shader" type="x-shader/x-fragment">
+            uniform sampler2D textureMap;
+            uniform sampler2D normalMap;
+            
+            varying vec2 vUv;
+            varying mat3 tbn;
+            varying vec3 vLightVector;
+            
+            void main() {
+                /** Transform texture coordinate of normal map to a range (-1, 1) */
+                    vec3 normalCoordinate = texture2D(normalMap, vUv).xyz * 2.0 - 1.0;
+
+                /** Transform the normal vector in the RGB channels to tangent space */
+                    vec3 normal = normalize(tbn * normalCoordinate.rgb);
+
+                /** Lighting intensity is calculated as dot of normal vector and the vertex-to-light vector */
+                    float intensity = max(0.07, dot(normal, vLightVector));
+                    vec4 lighting = vec4(intensity, intensity, intensity, 1.0);
+
+                /** Final color is calculated with the lighting applied */
+                    gl_FragColor = texture2D(textureMap, vUv) * lighting;
+            }
+          </script>
+        <script src="js/three.js"></script>
+        <script src="js/Reflector.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src='https://rawgit.com/mrdoob/stats.js/master/build/stats.min.js'></script>
+        <script src="js/Lights.js"></script>
+        <script src="js/MaterialsManager.js"></script>
+        <script src="js/MyVector.js"></script>
+        <script src="js/GameElement.js"></script>
+        <script src="js/Car.js"></script>
+        <script src="js/ORANGE.js"></script>
+        <script src="js/Candle.js"></script>
+        <script src="js/Cheerio.js"></script>
+        <script src="js/Butter.js"></script>
+        <script src="js/menus.js"></script>
+        <script src="js/gameManager.js"></script>
+    </head>
+    <body>
+
+        <script>
+            init();
+            animate();
+        </script>
+        <div id="info-wrapper">
+            <div id="live"></div>
+            <div id="info">Points: 0</div>
+        </div>
+
+        <canvas width="1008" height="921" style="width: 1008px; height: 921px;"></canvas>
+
+</body></html>
