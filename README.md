@@ -9,13 +9,16 @@
 |⇨|P|
 |⇧|Q|
 |⇩|A|
+|Camera1|1|
+|Camera2|2|
+|Camera3|3|
 
 ###### INFO: Wait for the black rectangle and follow the instruction to start the game
 
 
-[Micromachines Game](https://tmbp95.github.io/micromachinesWGL)
+[Micromachines Game](https://tmbp95.github.io/micromachines/micromachinesWGL)
 
 
 Since the game has a lot of high detailed elements, there is a lower version:
 
-[Micromachines Game LowD](https://tmbp95.github.io/micromachinesWGLLowDetail)
+[Micromachines Game LowD](https://tmbp95.github.io/micromachines/micromachinesWGLLowDetail)
